@@ -1,4 +1,4 @@
-module github.com/debeando/parquet
+module github.com/debeando/mysql2parquet
 
 go 1.16
 
