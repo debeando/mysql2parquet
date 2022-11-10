@@ -47,12 +47,10 @@ Tips:
     SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; SELECT * FROM users;
 `
 
-func version() string {
-	return "1.0.0"
-}
+const VERSION string = "1.0.0"
 
 func help(rc int) {
-	fmt.Printf(USAGE, version())
+	fmt.Printf(USAGE, VERSION)
 	os.Exit(rc)
 }
 
@@ -72,7 +70,7 @@ func main() {
 
 	switch {
 	case *fVersion:
-		fmt.Println(version())
+		fmt.Println(VERSION)
 		os.Exit(0)
 	case *fHelp:
 		help(0)
