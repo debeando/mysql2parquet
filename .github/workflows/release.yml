@@ -33,5 +33,28 @@ jobs:
           release_name: ${{ github.ref }}
           body: |
             ${{ steps.changelog.outputs.changelog }}
-          draft: false
+          draft: true
           prerelease: false
+
+      - name: build artifacts
+        run: make build-linux && make build-darwin
+
+      - name: upload linux artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./pkg/linux_amd64/mysql2parquet-linux_amd64.tar.gz
+          asset_name: mysql2parquet-linux_amd64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: upload darwin artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./pkg/darwin_amd64/mysql2parquet-darwin_amd64.tar.gz
+          asset_name: mysql2parquet-darwin_amd64.tar.gz
+          asset_content_type: application/gzip
