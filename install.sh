@@ -14,6 +14,11 @@ else
   exit
 fi
 
+if [[ $EUID -ne 0 ]]; then
+    echo "$0 is not running as root. Try using sudo."
+    exit 2
+fi
+
 if ! type "wget" &> /dev/null; then
   echo "The program 'wget' is currently not installed, please install it to continue."
   exit
