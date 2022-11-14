@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Apache License Version 2.0, January 2004
-# https://github.com/debeando/mysql2parquet/blob/master/LICENSE
-
 set -e
 
 if [[ "${OSTYPE}" == "linux"* ]]; then
@@ -15,8 +12,8 @@ else
 fi
 
 if [[ $EUID -ne 0 ]]; then
-    echo "$0 is not running as root. Try using sudo."
-    exit 2
+  echo "The script install.sh is not running as root. Try using sudo."
+  exit 2
 fi
 
 if ! type "wget" &> /dev/null; then
