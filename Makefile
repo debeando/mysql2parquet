@@ -21,4 +21,4 @@ clean: ## Remove build related file
 	@go clean
 
 release: ## Create release
-	scripts/release.sh
+	./release.sh
