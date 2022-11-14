@@ -98,29 +98,23 @@ func main() {
 		panic(err.Error())
 	}
 
-	// Open doesn't open a connection. Validate DSN data:
 	err = db.Ping()
 	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error())
 	}
 
 	rows, err := db.Query(*fQuery)
 	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error())
 	}
 	defer rows.Close()
 
 	columns, err := rows.Columns()
 	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error())
 	}
 
-	// Make a slice for the values
 	values := make([]sql.RawBytes, len(columns))
-
-	// rows.Scan wants '[]interface{}' as an argument, so we must copy the
-	// references into such a slice
-	// See http://code.google.com/p/go-wiki/wiki/InterfaceSlice for details
 	scanArgs := make([]interface{}, len(values))
 	for i := range values {
 		scanArgs[i] = &values[i]
@@ -131,7 +125,6 @@ func main() {
 
 	types, err := rows.ColumnTypes()
 	for _, s := range types {
-		// saber si es unsigned?
 		FieldTag := map[string]interface{}{}
 		FieldTag["name"] = s.Name()
 
@@ -169,7 +162,6 @@ func main() {
 
 	md, _ := json.Marshal(h)
 
-	//write
 	fw, err := local.NewLocalFileWriter(fmt.Sprintf("%s.parquet", *fParquet))
 	if err != nil {
 		panic(err.Error())
@@ -180,19 +172,14 @@ func main() {
 		panic(err.Error())
 	}
 
-	// Fetch rows
 	for rows.Next() {
-		// get RawBytes from data
 		err = rows.Scan(scanArgs...)
 		if err != nil {
-			panic(err.Error()) // proper error handling instead of panic in your app
+			panic(err.Error())
 		}
 
-		// Now do something with the data.
-		// Here we just print each column as a string.
 		tableData := map[string]string{}
 
-		// var value string
 		for i, col := range values {
 			tableData[columns[i]] = string(col)
 		}
@@ -202,14 +189,12 @@ func main() {
 			panic(err.Error())
 		}
 
-		// fmt.Println(string(jsonData))
-
 		if err = pw.Write(string(jsonData)); err != nil {
 			panic(err.Error())
 		}
 	}
 	if err = rows.Err(); err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
+		panic(err.Error())
 	}
 
 	if err = pw.WriteStop(); err != nil {
